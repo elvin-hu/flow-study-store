@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bose QC Ultra Earbuds - SoundGear</title>
+  <link rel="stylesheet" href="../shared.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="../index.html" class="logo">SoundGear</a>
+      <nav class="task-tabs">
+        <a href="../task-a/index.html" class="task-tab">Task A</a>
+        <a href="../task-b/index.html" class="task-tab active">Task B</a>
+        <a href="../task-c/index.html" class="task-tab">Task C</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Premium Earbuds</a> / Bose QC Ultra Earbuds</div>
+
+    <div class="product-detail">
+      <div class="image-placeholder bg-black-prod">Bose QC Ultra Earbuds</div>
+      <div class="info">
+        <h1>Bose QC Ultra Earbuds</h1>
+        <div class="price">$299</div>
+        <p class="description">
+          Bose QuietComfort Ultra Earbuds deliver world-class noise cancellation with breakthrough Bose Immersive Audio. CustomTune technology personalizes sound and noise cancellation to fit the unique shape of your ear. The snug, secure fit keeps them in place all day long.
+        </p>
+        <ul class="specs">
+          <li>World-class noise cancellation by Bose</li>
+          <li>Bose Immersive Audio for spatial sound</li>
+          <li>CustomTune ear-personalized sound</li>
+          <li>Up to 6 hours of battery life (24 hours with case)</li>
+          <li>IPX4 water and sweat resistant</li>
+        </ul>
+        <button class="btn btn-primary" onclick="addToCart('Bose QC Ultra Earbuds', 299)">Add to Cart</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    &copy; 2026 SoundGear. This is a demo store for research purposes.
+  </footer>
+
+  <script>
+    function addToCart(name, price) {
+      sessionStorage.setItem('cartProduct', name);
+      sessionStorage.setItem('cartPrice', price);
+      window.location.href = '../checkout.html?product=' + encodeURIComponent(name) + '&price=' + price;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sony MDR-EX155 - SoundGear</title>
+  <link rel="stylesheet" href="../shared.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="../index.html" class="logo">SoundGear</a>
+      <nav class="task-tabs">
+        <a href="../task-a/index.html" class="task-tab">Task A</a>
+        <a href="../task-b/index.html" class="task-tab">Task B</a>
+        <a href="../task-c/index.html" class="task-tab active">Task C</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Wired Earphones</a> / Sony MDR-EX155</div>
+
+    <div class="product-detail">
+      <div class="image-placeholder bg-teal">Sony MDR-EX155</div>
+      <div class="info">
+        <h1>Sony MDR-EX155</h1>
+        <div class="price">$18</div>
+        <p class="description">
+          The Sony MDR-EX155 delivers powerful, balanced sound with deep bass thanks to its neodymium drivers. The comfortable, secure-fitting silicone earbuds come in multiple sizes for a personalized fit. A serrated cord keeps tangles at bay so you can enjoy music on the go.
+        </p>
+        <ul class="specs">
+          <li>9mm neodymium dynamic drivers</li>
+          <li>Frequency response: 5 Hz – 24,000 Hz</li>
+          <li>Hybrid silicone earbuds (S/M/L)</li>
+          <li>Tangle-free serrated cable (1.2 m)</li>
+          <li>Lightweight design at only 3g per earbud</li>
+        </ul>
+        <button class="btn btn-primary" onclick="addToCart('Sony MDR-EX155', 18)">Add to Cart</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    &copy; 2026 SoundGear. This is a demo store for research purposes.
+  </footer>
+
+  <script>
+    function addToCart(name, price) {
+      sessionStorage.setItem('cartProduct', name);
+      sessionStorage.setItem('cartPrice', price);
+      window.location.href = '../checkout.html?product=' + encodeURIComponent(name) + '&price=' + price;
+    }
+  </script>
+</body>
+</html>

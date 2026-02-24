@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AirPods Pro - SoundGear</title>
+  <link rel="stylesheet" href="../shared.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="../index.html" class="logo">SoundGear</a>
+      <nav class="task-tabs">
+        <a href="../task-a/index.html" class="task-tab">Task A</a>
+        <a href="../task-b/index.html" class="task-tab active">Task B</a>
+        <a href="../task-c/index.html" class="task-tab">Task C</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Premium Earbuds</a> / AirPods Pro</div>
+
+    <div class="product-detail">
+      <div class="image-placeholder bg-silver">AirPods Pro</div>
+      <div class="info">
+        <h1>AirPods Pro</h1>
+        <div class="price">$249</div>
+        <p class="description">
+          AirPods Pro feature up to 2x more Active Noise Cancellation than the previous generation. Adaptive Audio dynamically blends Transparency mode and Active Noise Cancellation for the best listening experience in any environment. The custom-built H2 chip powers advanced audio features.
+        </p>
+        <ul class="specs">
+          <li>Apple H2 chip with Adaptive Audio</li>
+          <li>2x more Active Noise Cancellation</li>
+          <li>Personalized Spatial Audio with head tracking</li>
+          <li>Up to 6 hours of listening time (30 hours with case)</li>
+          <li>IP54 dust and water resistance</li>
+        </ul>
+        <button class="btn btn-primary" onclick="addToCart('AirPods Pro', 249)">Add to Cart</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    &copy; 2026 SoundGear. This is a demo store for research purposes.
+  </footer>
+
+  <script>
+    function addToCart(name, price) {
+      sessionStorage.setItem('cartProduct', name);
+      sessionStorage.setItem('cartPrice', price);
+      window.location.href = '../checkout.html?product=' + encodeURIComponent(name) + '&price=' + price;
+    }
+  </script>
+</body>
+</html>

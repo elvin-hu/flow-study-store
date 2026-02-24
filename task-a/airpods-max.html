@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AirPods Max - SoundGear</title>
+  <link rel="stylesheet" href="../shared.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="../index.html" class="logo">SoundGear</a>
+      <nav class="task-tabs">
+        <a href="../task-a/index.html" class="task-tab active">Task A</a>
+        <a href="../task-b/index.html" class="task-tab">Task B</a>
+        <a href="../task-c/index.html" class="task-tab">Task C</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Over-Ear Headphones</a> / AirPods Max</div>
+
+    <div class="product-detail">
+      <div class="image-placeholder bg-space-gray">AirPods Max</div>
+      <div class="info">
+        <h1>AirPods Max</h1>
+        <div class="price">$549</div>
+        <p class="description">
+          AirPods Max combine high-fidelity audio with the effortless magic of AirPods. The custom-built driver delivers rich, deep bass, accurate mid-ranges, and crisp high-frequency extension. Featuring Active Noise Cancellation, Transparency mode, and personalized Spatial Audio with dynamic head tracking.
+        </p>
+        <ul class="specs">
+          <li>Apple H2 chip with computational audio</li>
+          <li>Active Noise Cancellation &amp; Transparency mode</li>
+          <li>Personalized Spatial Audio with head tracking</li>
+          <li>Up to 20 hours of battery life</li>
+          <li>Digital Crown for precise volume control</li>
+        </ul>
+        <button class="btn btn-primary" onclick="addToCart('AirPods Max', 549)">Add to Cart</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    &copy; 2026 SoundGear. This is a demo store for research purposes.
+  </footer>
+
+  <script>
+    function addToCart(name, price) {
+      sessionStorage.setItem('cartProduct', name);
+      sessionStorage.setItem('cartPrice', price);
+      window.location.href = '../checkout.html?product=' + encodeURIComponent(name) + '&price=' + price;
+    }
+  </script>
+</body>
+</html>

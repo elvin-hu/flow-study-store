@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmed - SoundGear</title>
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">SoundGear</a>
+      <nav class="task-tabs">
+        <a href="task-a/index.html" class="task-tab">Task A</a>
+        <a href="task-b/index.html" class="task-tab">Task B</a>
+        <a href="task-c/index.html" class="task-tab">Task C</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="confirmation">
+      <div class="checkmark">✓</div>
+      <h1>Thank you for your order!</h1>
+      <p class="subtitle">Your order has been placed successfully. A confirmation email will be sent shortly.</p>
+
+      <div class="details">
+        <div class="row">
+          <span class="label">Order Number</span>
+          <span id="order-number"></span>
+        </div>
+        <div class="row">
+          <span class="label">Product</span>
+          <span id="order-product"></span>
+        </div>
+        <div class="row">
+          <span class="label">Total Charged</span>
+          <span id="order-total"></span>
+        </div>
+        <div class="row">
+          <span class="label">Estimated Delivery</span>
+          <span id="order-delivery"></span>
+        </div>
+      </div>
+
+      <a href="index.html" class="btn btn-primary">Continue Shopping</a>
+    </div>
+  </main>
+
+  <footer class="footer">
+    &copy; 2026 SoundGear. This is a demo store for research purposes.
+  </footer>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const product = params.get('product') || 'Unknown Product';
+    const total = params.get('total') || '0.00';
+
+    const orderNum = 'SG-' + Math.floor(100000 + Math.random() * 900000);
+
+    const delivery = new Date();
+    delivery.setDate(delivery.getDate() + Math.floor(3 + Math.random() * 5));
+    const deliveryStr = delivery.toLocaleDateString('en-US', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
+
+    document.getElementById('order-number').textContent = orderNum;
+    document.getElementById('order-product').textContent = product;
+    document.getElementById('order-total').textContent = '$' + total;
+    document.getElementById('order-delivery').textContent = deliveryStr;
+
+    sessionStorage.removeItem('cartProduct');
+    sessionStorage.removeItem('cartPrice');
+  </script>
+</body>
+</html>

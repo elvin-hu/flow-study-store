@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sony WH-1000XM6 - SoundGear</title>
+  <link rel="stylesheet" href="../shared.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="../index.html" class="logo">SoundGear</a>
+      <nav class="task-tabs">
+        <a href="../task-a/index.html" class="task-tab active">Task A</a>
+        <a href="../task-b/index.html" class="task-tab">Task B</a>
+        <a href="../task-c/index.html" class="task-tab">Task C</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Over-Ear Headphones</a> / Sony WH-1000XM6</div>
+
+    <div class="product-detail">
+      <div class="image-placeholder bg-dark">Sony WH-1000XM6</div>
+      <div class="info">
+        <h1>Sony WH-1000XM6</h1>
+        <div class="price">$399</div>
+        <p class="description">
+          The WH-1000XM6 sets a new standard for noise-canceling headphones. With Sony's Integrated Processor V2 and new multi-noise sensor technology, these headphones deliver unprecedented silence. Enjoy up to 30 hours of battery life and ultra-comfortable design for all-day wear.
+        </p>
+        <ul class="specs">
+          <li>Integrated Processor V2 for superior ANC</li>
+          <li>30mm carbon fiber composite driver unit</li>
+          <li>Up to 30 hours of battery life</li>
+          <li>Multipoint Bluetooth connection</li>
+          <li>Speak-to-Chat &amp; Quick Attention mode</li>
+        </ul>
+        <button class="btn btn-primary" onclick="addToCart('Sony WH-1000XM6', 399)">Add to Cart</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    &copy; 2026 SoundGear. This is a demo store for research purposes.
+  </footer>
+
+  <script>
+    function addToCart(name, price) {
+      sessionStorage.setItem('cartProduct', name);
+      sessionStorage.setItem('cartPrice', price);
+      window.location.href = '../checkout.html?product=' + encodeURIComponent(name) + '&price=' + price;
+    }
+  </script>
+</body>
+</html>
