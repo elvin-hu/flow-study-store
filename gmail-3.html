@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gmail - Inbox</title>
+  <style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Google Sans', Roboto, Arial, sans-serif; background: #f6f8fc; color: #202124; overflow: hidden; }
+.gmail-app { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+.gmail-body { display: flex; flex: 1; overflow: hidden; }
+
+.gmail-header { display: flex; align-items: center; height: 64px; padding: 0 16px; background: #fff; border-bottom: 1px solid #e0e0e0; flex-shrink: 0; }
+.header-left { display: flex; align-items: center; gap: 8px; width: 256px; flex-shrink: 0; }
+.menu-btn { width: 40px; height: 40px; border: none; background: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #5f6368; }
+.menu-btn:hover { background: #f1f3f4; }
+.gmail-logo { display: flex; align-items: center; gap: 4px; }
+.logo-text { font-size: 22px; font-weight: 400; color: #5f6368; letter-spacing: -0.5px; }
+.header-center { flex: 1; max-width: 720px; margin: 0 auto; }
+.search-bar { display: flex; align-items: center; background: #eaf1fb; border-radius: 28px; padding: 0 16px; height: 44px; transition: background 0.2s, box-shadow 0.2s; }
+.search-bar:focus-within { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.15), 0 1px 2px rgba(0,0,0,0.1); }
+.search-icon { flex-shrink: 0; margin-right: 12px; }
+.search-input { flex: 1; border: none; background: none; font-size: 16px; color: #202124; outline: none; font-family: inherit; }
+.search-input::placeholder { color: #5f6368; }
+.header-right { display: flex; align-items: center; justify-content: flex-end; width: 256px; flex-shrink: 0; }
+.avatar-circle { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 500; color: #fff; cursor: pointer; }
+.user-avatar { background: #1a73e8; }
+
+.gmail-sidebar { width: 256px; padding: 8px 12px; flex-shrink: 0; overflow-y: auto; }
+.compose-btn { display: flex; align-items: center; gap: 12px; width: auto; padding: 0 24px 0 16px; height: 56px; border: none; border-radius: 16px; background: #c2e7ff; color: #001d35; font-size: 14px; font-weight: 500; font-family: inherit; cursor: pointer; margin-bottom: 12px; transition: box-shadow 0.15s; letter-spacing: 0.2px; }
+.compose-btn:hover { box-shadow: 0 1px 3px rgba(0,0,0,0.15), 0 1px 2px rgba(0,0,0,0.1); }
+.nav-item { display: flex; align-items: center; gap: 12px; width: 100%; padding: 0 16px; height: 32px; border: none; border-radius: 24px; background: none; color: #444746; font-size: 14px; font-family: inherit; cursor: pointer; transition: background 0.1s; text-align: left; margin-bottom: 2px; }
+.nav-item:hover { background: #e8eaed; }
+.nav-item.active { background: #d3e3fd; color: #001d35; font-weight: 600; }
+.nav-label { flex: 1; }
+.nav-count { font-size: 12px; font-weight: 600; color: #001d35; }
+
+.gmail-main { flex: 1; background: #fff; border-radius: 16px 0 0 0; overflow-y: auto; position: relative; }
+.inbox-view { display: flex; flex-direction: column; }
+.inbox-toolbar { display: flex; align-items: center; gap: 4px; padding: 4px 8px; border-bottom: 1px solid #e0e0e0; height: 48px; }
+.toolbar-btn { width: 36px; height: 36px; border: none; background: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #5f6368; }
+.toolbar-btn:hover { background: #f1f3f4; }
+.checkbox-wrap { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+.checkbox-wrap input { width: 16px; height: 16px; accent-color: #1a73e8; cursor: pointer; }
+.tab-row { display: flex; border-bottom: 1px solid #e0e0e0; }
+.tab-btn { display: flex; align-items: center; gap: 8px; padding: 0 20px; height: 48px; border: none; background: none; font-size: 14px; color: #5f6368; font-family: inherit; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.15s; }
+.tab-btn:hover { background: #f1f3f4; }
+.tab-btn.active { color: #1a73e8; border-bottom-color: #1a73e8; font-weight: 500; }
+.email-row { display: flex; align-items: center; padding: 0 8px; height: 44px; cursor: pointer; transition: box-shadow 0.1s; border-bottom: 1px solid transparent; }
+.email-row:hover { box-shadow: inset 0 -1px 0 #dadce0, inset 0 1px 0 #dadce0; z-index: 1; }
+.email-row.unread { background: #fff; }
+.email-row.unread .email-sender, .email-row.unread .email-subject { font-weight: 700; color: #202124; }
+.star-btn { width: 36px; height: 36px; border: none; background: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.star-btn:hover svg { stroke: #f4b400; }
+.email-sender { width: 200px; font-size: 14px; color: #202124; font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 0; }
+.email-content { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; min-width: 0; }
+.email-subject { color: #202124; }
+.email-dash { color: #5f6368; }
+.email-snippet { color: #5f6368; font-weight: 400; }
+.email-date { font-size: 12px; color: #202124; font-weight: 400; flex-shrink: 0; padding-left: 16px; }
+.email-row.unread .email-date { font-weight: 700; }
+
+.thread-view { padding: 0 24px 100px; max-width: 900px; display: none; }
+.thread-view.active { display: block; }
+.thread-toolbar { display: flex; align-items: center; gap: 4px; padding: 8px 0; border-bottom: 1px solid #e0e0e0; margin-bottom: 16px; }
+.back-btn { margin-right: 8px; }
+.thread-subject { font-size: 22px; font-weight: 400; color: #202124; margin-bottom: 8px; line-height: 1.4; }
+.thread-label { display: inline-block; padding: 2px 6px; background: #e8eaed; border-radius: 4px; font-size: 12px; color: #5f6368; font-weight: 500; margin-bottom: 20px; }
+.message-card { border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
+.message-header { display: flex; align-items: flex-start; padding: 16px 16px 0; gap: 12px; }
+.message-avatar { width: 40px; height: 40px; border-radius: 50%; background: #ea4335; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 500; flex-shrink: 0; }
+.me-avatar { background: #1a73e8; }
+.message-meta { flex: 1; min-width: 0; }
+.message-from-row { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+.message-from { font-size: 14px; font-weight: 600; color: #202124; }
+.message-email { font-size: 12px; color: #5f6368; }
+.message-to { font-size: 12px; color: #5f6368; margin-top: 2px; }
+.message-date { font-size: 12px; color: #5f6368; white-space: nowrap; flex-shrink: 0; }
+.message-body { padding: 16px; font-size: 14px; line-height: 1.6; color: #202124; white-space: pre-wrap; }
+
+.reply-prompt { display: flex; gap: 8px; margin-top: 12px; }
+.reply-prompt-btn { display: flex; align-items: center; gap: 8px; padding: 8px 20px; border: 1px solid #dadce0; border-radius: 18px; background: #fff; color: #202124; font-size: 14px; font-family: inherit; cursor: pointer; transition: background 0.1s, box-shadow 0.1s; }
+.reply-prompt-btn:hover { background: #f6f8fc; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+.reply-compose { border: 1px solid #dadce0; border-radius: 12px; margin-top: 12px; overflow: hidden; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.08); display: none; }
+.reply-compose.active { display: block; }
+.reply-compose-header { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid #e8eaed; font-size: 13px; color: #5f6368; }
+.reply-to-label { color: #202124; font-size: 13px; }
+.reply-textarea { width: 100%; padding: 16px; border: none; outline: none; font-size: 14px; font-family: inherit; color: #202124; resize: vertical; min-height: 120px; line-height: 1.6; background: #fff; }
+.reply-textarea::placeholder { color: #80868b; }
+.reply-actions { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; border-top: 1px solid #e8eaed; }
+.send-btn { padding: 0 24px; height: 36px; border: none; border-radius: 18px; background: #0b57d0; color: #fff; font-size: 14px; font-weight: 500; font-family: inherit; cursor: pointer; transition: background 0.15s, box-shadow 0.15s; }
+.send-btn:hover:not(:disabled) { background: #1a5bbf; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+.send-btn:disabled { opacity: 0.5; cursor: default; }
+.reply-toolbar-actions { display: flex; gap: 4px; }
+.reply-tool-btn { width: 36px; height: 36px; border: none; background: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #5f6368; }
+.reply-tool-btn:hover { background: #f1f3f4; }
+.discard-btn:hover { color: #d93025; }
+
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #323232; color: #fff; padding: 12px 24px; border-radius: 8px; font-size: 14px; z-index: 100; animation: toast-in 0.25s ease-out; box-shadow: 0 4px 12px rgba(0,0,0,0.25); display: none; }
+.toast.show { display: block; }
+@keyframes toast-in { from { opacity: 0; transform: translateX(-50%) translateY(12px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+  </style>
+</head>
+<body>
+<div class="gmail-app">
+  <header class="gmail-header">
+    <div class="header-left">
+      <button class="menu-btn" aria-label="Menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+      </button>
+      <div class="gmail-logo">
+        <svg width="40" height="30" viewBox="0 0 75 24" class="logo-icon">
+          <path d="M10.5 2.5L2 8.5v13h6v-8l2.5 2 2.5-2v8h6v-13l-8.5-6z" fill="#EA4335"/>
+          <path d="M2 8.5v13h6v-8l-6-5z" fill="#4285F4"/>
+          <path d="M19 8.5v13h-6v-8l6-5z" fill="#34A853"/>
+          <path d="M2 8.5l8.5 6.5 8.5-6.5-8.5-6-8.5 6z" fill="#FBBC04" opacity="0.9"/>
+        </svg>
+        <span class="logo-text">Gmail</span>
+      </div>
+    </div>
+    <div class="header-center">
+      <div class="search-bar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2" class="search-icon"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" placeholder="Search mail" class="search-input">
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="avatar-circle user-avatar">E</div>
+    </div>
+  </header>
+
+  <div class="gmail-body">
+    <nav class="gmail-sidebar">
+      <button class="compose-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z" fill="#1a73e8"/>
+          <path d="M20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="#1a73e8"/>
+        </svg>
+        <span>Compose</span>
+      </button>
+      <button class="nav-item active" data-nav="inbox">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        <span class="nav-label">Inbox</span>
+        <span class="nav-count">1</span>
+      </button>
+      <button class="nav-item" data-nav="starred">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <span class="nav-label">Starred</span>
+      </button>
+      <button class="nav-item" data-nav="snoozed">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <span class="nav-label">Snoozed</span>
+      </button>
+      <button class="nav-item" data-nav="sent">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        <span class="nav-label">Sent</span>
+      </button>
+      <button class="nav-item" data-nav="drafts">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+        <span class="nav-label">Drafts</span>
+      </button>
+    </nav>
+
+    <main class="gmail-main">
+      <!-- Inbox View -->
+      <div class="inbox-view" id="inbox-view">
+        <div class="inbox-toolbar">
+          <label class="checkbox-wrap"><input type="checkbox"><span class="checkmark"></span></label>
+          <button class="toolbar-btn" aria-label="Refresh">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+          </button>
+          <button class="toolbar-btn" aria-label="More">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+          </button>
+        </div>
+        <div class="tab-row">
+          <button class="tab-btn active">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            Primary
+          </button>
+          <button class="tab-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+            Social
+          </button>
+          <button class="tab-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zM22 6l-10 7L2 6"/></svg>
+            Promotions
+          </button>
+        </div>
+        <div class="email-row unread" id="email-row" role="button" tabindex="0">
+          <label class="checkbox-wrap" onclick="event.stopPropagation()"><input type="checkbox"><span class="checkmark"></span></label>
+          <button class="star-btn" onclick="event.stopPropagation()" aria-label="Star">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#dadce0" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </button>
+          <span class="email-sender">Alex Chen</span>
+          <span class="email-content">
+            <span class="email-subject">Coffee chat week of March 16th?</span>
+            <span class="email-dash"> — </span>
+            <span class="email-snippet">Want to grab coffee the week of March 16th? I have a few ideas</span>
+          </span>
+          <span class="email-date">Feb 25</span>
+        </div>
+      </div>
+
+      <!-- Thread View -->
+      <div class="thread-view" id="thread-view">
+        <div class="thread-toolbar">
+          <button class="toolbar-btn back-btn" id="back-btn" aria-label="Back">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </button>
+          <button class="toolbar-btn" aria-label="Archive">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8v13H3V8M1 3h22v5H1zM10 12h4"/></svg>
+          </button>
+          <button class="toolbar-btn" aria-label="Delete">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+          </button>
+          <button class="toolbar-btn" aria-label="Mark unread">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zM22 6l-10 7L2 6"/></svg>
+          </button>
+        </div>
+        <h1 class="thread-subject">Coffee chat week of March 16th?</h1>
+        <span class="thread-label">Inbox</span>
+
+        <div class="message-card">
+          <div class="message-header">
+            <div class="message-avatar">AC</div>
+            <div class="message-meta">
+              <div class="message-from-row">
+                <span class="message-from">Alex Chen</span>
+                <span class="message-email">&lt;alex.chen@company.com&gt;</span>
+              </div>
+              <div class="message-to">to me</div>
+            </div>
+            <span class="message-date">Feb 25, 2:34 PM</span>
+          </div>
+          <div class="message-body">Hi!
+
+Want to grab coffee the week of March 16th? I have a few ideas I'd love to bounce off you about the onboarding flow — nothing urgent, just want to get your take before I start putting together a proposal.
+
+Any morning that week works for me. 20-30 min should be plenty.
+
+Thanks,
+Alex</div>
+        </div>
+
+        <div id="replies-container"></div>
+
+        <div class="reply-prompt" id="reply-prompt">
+          <button class="reply-prompt-btn" id="reply-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 17l-5-5 5-5"/><path d="M20 18v-2a4 4 0 00-4-4H4"/></svg>
+            Reply
+          </button>
+          <button class="reply-prompt-btn" id="forward-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 17l5-5-5-5"/><path d="M4 18v-2a4 4 0 014-4h12"/></svg>
+            Forward
+          </button>
+        </div>
+
+        <div class="reply-compose" id="reply-compose">
+          <div class="reply-compose-header">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2"><path d="M9 17l-5-5 5-5"/><path d="M20 18v-2a4 4 0 00-4-4H4"/></svg>
+            <span class="reply-to-label">Alex Chen &lt;alex.chen@company.com&gt;</span>
+          </div>
+          <textarea class="reply-textarea" id="reply-textarea" placeholder="Write your reply..." rows="6"></textarea>
+          <div class="reply-actions">
+            <button class="send-btn" id="send-btn" disabled>Send</button>
+            <div class="reply-toolbar-actions">
+              <button class="reply-tool-btn" aria-label="Attach">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+              </button>
+              <button class="reply-tool-btn discard-btn" id="discard-btn" aria-label="Discard">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="toast" id="toast">Message sent</div>
+    </main>
+  </div>
+</div>
+
+<script>
+const emailRow = document.getElementById('email-row');
+const inboxView = document.getElementById('inbox-view');
+const threadView = document.getElementById('thread-view');
+const backBtn = document.getElementById('back-btn');
+const replyBtn = document.getElementById('reply-btn');
+const forwardBtn = document.getElementById('forward-btn');
+const replyPrompt = document.getElementById('reply-prompt');
+const replyCompose = document.getElementById('reply-compose');
+const replyTextarea = document.getElementById('reply-textarea');
+const sendBtn = document.getElementById('send-btn');
+const discardBtn = document.getElementById('discard-btn');
+const repliesContainer = document.getElementById('replies-container');
+const toast = document.getElementById('toast');
+
+emailRow.addEventListener('click', function() {
+  emailRow.classList.remove('unread');
+  inboxView.style.display = 'none';
+  threadView.classList.add('active');
+});
+emailRow.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') emailRow.click();
+});
+
+backBtn.addEventListener('click', function() {
+  inboxView.style.display = '';
+  threadView.classList.remove('active');
+  replyCompose.classList.remove('active');
+  replyPrompt.style.display = '';
+});
+
+function showReplyBox() {
+  replyPrompt.style.display = 'none';
+  replyCompose.classList.add('active');
+  replyTextarea.focus();
+}
+replyBtn.addEventListener('click', showReplyBox);
+forwardBtn.addEventListener('click', showReplyBox);
+
+replyTextarea.addEventListener('input', function() {
+  sendBtn.disabled = !replyTextarea.value.trim();
+});
+
+replyTextarea.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) sendReply();
+});
+
+discardBtn.addEventListener('click', function() {
+  replyCompose.classList.remove('active');
+  replyPrompt.style.display = '';
+  replyTextarea.value = '';
+  sendBtn.disabled = true;
+});
+
+function sendReply() {
+  var text = replyTextarea.value.trim();
+  if (!text) return;
+  var now = new Date();
+  var time = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var date = months[now.getMonth()] + ' ' + now.getDate();
+
+  var card = document.createElement('div');
+  card.className = 'message-card reply-card';
+  card.innerHTML =
+    '<div class="message-header">' +
+      '<div class="message-avatar me-avatar">ME</div>' +
+      '<div class="message-meta">' +
+        '<div class="message-from-row"><span class="message-from">Me</span><span class="message-email">&lt;me@company.com&gt;</span></div>' +
+        '<div class="message-to">to Alex Chen</div>' +
+      '</div>' +
+      '<span class="message-date">' + date + ', ' + time + '</span>' +
+    '</div>' +
+    '<div class="message-body">' + text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>') + '</div>';
+  repliesContainer.appendChild(card);
+  card.scrollIntoView({ behavior: 'smooth' });
+
+  replyTextarea.value = '';
+  sendBtn.disabled = true;
+  replyCompose.classList.remove('active');
+  replyPrompt.style.display = '';
+
+  toast.classList.add('show');
+  setTimeout(function() { toast.classList.remove('show'); }, 2000);
+}
+sendBtn.addEventListener('click', sendReply);
+
+document.querySelectorAll('.nav-item').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.nav-item').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    if (btn.dataset.nav === 'inbox') {
+      inboxView.style.display = '';
+      threadView.classList.remove('active');
+      replyCompose.classList.remove('active');
+      replyPrompt.style.display = '';
+    }
+  });
+});
+</script>
+</body>
+</html>
