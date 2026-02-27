@@ -300,6 +300,7 @@ emailRow.addEventListener('click', function() {
   emailRow.classList.remove('unread');
   inboxView.style.display = 'none';
   threadView.classList.add('active');
+  document.title = 'Gmail - Quick meeting next week?';
 });
 emailRow.addEventListener('keydown', function(e) {
   if (e.key === 'Enter') emailRow.click();
@@ -310,6 +311,7 @@ backBtn.addEventListener('click', function() {
   threadView.classList.remove('active');
   replyCompose.classList.remove('active');
   replyPrompt.style.display = '';
+  document.title = 'Gmail - Inbox';
 });
 
 function showReplyBox() {
