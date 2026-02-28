@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gmail - Inbox</title>
+  <title>Meeting with Alex Chen - March 9th?</title>
   <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Google Sans', Roboto, Arial, sans-serif; background: #f6f8fc; color: #202124; overflow: hidden; }
@@ -296,22 +296,16 @@ const discardBtn = document.getElementById('discard-btn');
 const repliesContainer = document.getElementById('replies-container');
 const toast = document.getElementById('toast');
 
-emailRow.addEventListener('click', function() {
-  emailRow.classList.remove('unread');
-  inboxView.style.display = 'none';
-  threadView.classList.add('active');
-  document.title = 'Gmail - Meeting with Alex Chen - March 9th?';
-});
-emailRow.addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') emailRow.click();
-});
+// Open email thread directly on load
+inboxView.style.display = 'none';
+threadView.classList.add('active');
+emailRow.classList.remove('unread');
 
 backBtn.addEventListener('click', function() {
   inboxView.style.display = '';
   threadView.classList.remove('active');
   replyCompose.classList.remove('active');
   replyPrompt.style.display = '';
-  document.title = 'Gmail - Inbox';
 });
 
 function showReplyBox() {
